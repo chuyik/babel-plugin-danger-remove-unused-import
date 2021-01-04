@@ -11,24 +11,46 @@ module.exports = function(babel) {
   return {
     visitor: {
       Program: {
-        enter: (path, { opts } = {}) => {
+        exit: (path, { opts } = {}) => {
+          const UnRefBindings = new Map()
           for (const [name, binding] of Object.entries(path.scope.bindings)) {
-            if (binding.kind === 'module') {
-              if (!binding.referenced) {
-                const source = binding.path.parentPath.get('source')
-                if (
-                  t.isStringLiteral(source) &&
-                  (!opts.ignore || !match(opts.ignore, source.node.value))
-                ) {
-                  if (binding.path.node.type === 'ImportSpecifier') {
-                    binding.path.remove()
-                  } else if (binding.path.parentPath) {
-                    binding.path.parentPath.remove()
-                  }
-                }
+            if (!binding.path.parentPath || binding.kind !== 'module') continue
+
+            const source = binding.path.parentPath.get('source')
+            const importName = source.node.value
+            if (
+              !t.isStringLiteral(source) ||
+              (opts.ignore && match(opts.ignore, importName))
+            )
+              continue
+
+            const key = `${importName}(${source.node.loc.start.line})`
+
+            if (!UnRefBindings.has(key)) {
+              UnRefBindings.set(key, binding)
+            }
+
+            if (binding.referenced) {
+              UnRefBindings.set(key, null)
+            } else {
+              const nodeType = binding.path.node.type
+              if (nodeType === 'ImportSpecifier') {
+                binding.path.remove()
+              } else if (nodeType === 'ImportDefaultSpecifier') {
+                binding.path.remove()
+              } else if (nodeType === 'ImportNamespaceSpecifier') {
+                binding.path.remove()
+              } else if (binding.path.parentPath) {
+                binding.path.parentPath.remove()
               }
             }
           }
+
+          UnRefBindings.forEach((binding, key) => {
+            if (binding && binding.path.parentPath) {
+              binding.path.parentPath.remove()
+            }
+          })
         }
       }
     }

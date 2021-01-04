@@ -113,6 +113,33 @@ _.b;
 const sum = a + b;"
 `)
     })
+
+    it('multi-import-2', function() {
+      expect(transformTest('unused/multi-import-2.js').code)
+        .toMatchInlineSnapshot(`
+"
+import { aBc } from './abc';
+
+import Gh from './gh';
+import { hi } from './hi';
+import Jk, { jk } from './jk';
+
+import * as Kl from './kl';
+
+import { mn } from './mn';
+
+console.log(aBc);
+console.log(Gh);
+console.log(hi);
+console.log(Jk, jk);
+console.log(Kl);
+console.log(mn);
+
+export default function init() {
+  console.log('ok');
+}"
+`)
+    })
   })
 
   describe('used', () => {

@@ -24,7 +24,8 @@ module.exports = function(babel) {
             )
               continue
 
-            const key = `${importName}(${source.node.loc.start.line})`
+            const key = `${importName}(${source.node.loc &&
+              source.node.loc.start.line})`
 
             if (!UnRefBindings.has(key)) {
               UnRefBindings.set(key, binding)

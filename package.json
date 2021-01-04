@@ -52,12 +52,12 @@
   "dependencies": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/imcuttle/babel-plugin-danger-remove-unused-import.git"
+    "url": "git+https://github.com/chuyik/babel-plugin-danger-remove-unused-import.git"
   },
   "bugs": {
-    "url": "https://github.com/imcuttle/babel-plugin-danger-remove-unused-import/issues"
+    "url": "https://github.com/chuyik/babel-plugin-danger-remove-unused-import/issues"
   },
-  "homepage": "https://github.com/imcuttle/babel-plugin-danger-remove-unused-import#readme",
+  "homepage": "https://github.com/chuyik/babel-plugin-danger-remove-unused-import#readme",
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"

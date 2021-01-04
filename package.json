@@ -1,5 +1,5 @@
 {
-  "name": "babel-plugin-danger-remove-unused-import",
+  "name": "babel-plugin-remove-unused-import",
   "version": "2.0.0",
   "description": "",
   "main": "index.js",
